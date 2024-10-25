@@ -8,26 +8,14 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // CORS configuration
-const corsOptions = {
-    // Replace with your frontend URL(s)
-    origin: [
-        'http://localhost:3000',
-        'http://localhost:5173',
-        'http://127.0.0.1:3000',
-        'https://appdrafting-application.vercel.app/'
-        // Add your production frontend URL when deploying
-        // 'https://yourdomain.com'
-    ],
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-    maxAge: 86400 // 24 hours
-};
+app.use(cors({
+  origin: '*' , // Specify your frontend origin
+  credentials: true // Allow cookies and other credentials to be sent
+}));
 
-app.use(cors(corsOptions));
+
 app.use(express.json());
 
-// MongoDB connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://royr55601:royr55601@cluster0.xra8inl.mongodb.net/legaldrafting', {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -51,9 +39,6 @@ const exportFile = require('./Routes/exportFiles');
 const aiAudioChat = require('./Routes/aiAudioChat');
 const courtDocumentRoutes = require('./Routes/courtDocumentRoutes');
 const pdfExport = require('./Routes/pdfExtract');
-
-// Pre-flight OPTIONS request handler
-app.options('*', cors(corsOptions));
 
 // API routes
 app.use('/api', apiRoutes);
